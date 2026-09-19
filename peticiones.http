@@ -1,0 +1,46 @@
+### 1. Inscribir a Karla (id 1) en el horario 1 
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 1
+}
+
+### 2. Inscribir a Omar (id 2) en el horario 1 
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 2
+}
+
+### 3. Inscribir a Sofia (id 3) en el horario 1 
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 3
+}
+
+### 4. Repetir a Karla (id 1) en el mismo horario
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 1
+}
+
+### 5. Cancelar la inscripción de Karla
+DELETE http://localhost:3000/inscripciones/1
+
+### 6. Reenviar la petición que había fallado por cupo (la de Sofia) 
+POST http://localhost:3000/inscripciones
+Content-Type: application/json
+
+{
+  "horarioId": 1,
+  "miembroId": 3
+}
