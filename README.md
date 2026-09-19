@@ -45,16 +45,16 @@ liberó un lugar y ahora sí ese pudo inscrbir, respondiendo 201.
 ## Capturas
 
 ### 201 Created, con header Location
-![Inscripción exitosa](capturas/inscripcion1.png)
+![Inscripción exitosa](capturas/inscripcion2.png)
 
 ### 409 — cupo lleno
-![Cupo lleno](capturas/409_por_cupo_clase.png)
+![Cupo lleno](capturas/409%20por%20cupo%20clase.png)
 
 ### 409 — inscripción duplicada
-![Inscripción duplicada](capturas/409_repetir_horario.png)
+![Inscripción duplicada](capturas/409%20repetir%20horario.png)
 
 ### Cancelación
-![Cancelar inscripción](capturas/cancelar_inscripcion_.png)
+![Cancelar inscripción](capturas/cancelar%20inscripcion%20.png)
 
 ### Reenvío exitoso tras liberar el cupo
-![Inscribir de nuevo](capturas/inscribir_de_nuevo.png)
+![Inscribir de nuevo](capturas/inscribir%20de%20nuevo.png)
