@@ -41,6 +41,7 @@ export class InscripcionesController {
 
     try{
     const inscripcion= await this.servicio.crear(dto);
+    //agrega la cabecera Location, apuntando a la URL específica de la inscripción recién creada (usando su id real)
     res.setHeader('Location', `/inscripciones/${inscripcion.id}`);
     return aInscripcionDto(inscripcion);
     } catch(error){

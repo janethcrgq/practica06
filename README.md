@@ -1,3 +1,50 @@
+## Preguntas — Práctica 7 (Miembros)
+
+### 1. ¿Por qué la interfaz `MiembroRepository` no menciona Express, NestJS ni memoria?
+
+Porque es un contrato del dominio, no un detalle de implementación. La interfaz solo
+describe qué operaciones existen sobre un Miembro (listar, buscarPorId, crear,
+actualizar, eliminar), no cómo se resuelven. Express es un detalle de transporte HTTP y memoria
+es un detalle de persistencia. Si la interfaz mencionara cualquiera de
+los dos, el dominio quedaría atado a una tecnología específica, y perderíamos la
+posibilidad de cambiar a Prisma/MySQL más adelante sin tocar el Service ni el Controller.
+
+### 2. ¿Qué palabra de `MiembroMemoriaRepository` es la que promete cumplir la interfaz del paso anterior?
+
+implements. Es la palabra clave que obliga al compilador de TypeScript a verificar que
+MiembroMemoriaRepository tenga los cinco métodos de `MiembroRepository`, con las mismas
+firmas. Sin implements, no habría ninguna garantía de que la clase concreta realmente cumpla 
+el contrato del dominio.
+
+### 3. ¿Por qué `miembros.service.ts` no sabe qué es una petición HTTP?
+
+Porque solo conoce la interfaz MiembroRepository y los DTOs. No importa nada relacionado a HTTP.
+Toda esa traducción entre HTTP y el dominio es responsabilidad exclusiva del
+Controller; el Service recibe datos ya extraídos del `@Body()` y devuelve entidades o
+`null`, sin enterarse nunca de si esos datos llegaron por una petición web, una prueba
+automatizada o cualquier otro medio.
+
+### 4. ¿Por qué el Service se inyecta sin token en el Controller, y el repositorio sí necesita uno?
+
+MiembrosService es una clase concreta, existe como valor real en tiempo de
+ejecución, así que Nest puede usar el propio tipo de la clase para saber qué instancia inyectar.
+MiembroRepository, en cambio, es solo una interfaz de TypeScript que se
+borra por completo al compilar a JavaScript y no deja ningún rastro en tiempo de
+ejecución. Como Nest no tiene nada para buscar para ese tipo, hace falta un token
+(MIEMBRO_REPOSITORY) que actúe como etiqueta explícita, para decirle manualmente qué
+proveedor concreto (MiembroMemoriaRepository) entregar en ese lugar del constructor.
+
+### 5. ¿Qué prueba, en los hechos, que agregar Miembros no rompió nada de Inscripciones?
+
+Que al repetir las mismas peticiones de la Práctica 6 sobre `/inscripciones` (listar,
+buscar, crear, cancelar) se obtienen exactamente los mismos códigos de estado y la misma
+estructura de datos que antes de agregar el módulo Miembros. Como cada módulo tiene su
+propio Controller, Service, Repository y token de inyección completamente aislados,
+registrar MiembrosModule en app.module.ts no modifica ni una sola línea de
+InscripcionesModule. Si algo se hubiera roto, sería porque se tocó código compartido, no por
+el simple hecho de sumar un módulo nuevo al proyecto.
+
+
 ## Preguntas
 
 ### 1. ¿Qué pasaría si el módulo no quedara registrado en la raíz?
@@ -42,19 +89,3 @@ miembroId: 1, su estado cambió a cancelada, y el Service solo cuenta las
 inscripciones con estado confirmada para validar el cupo. Al cancelar una
 liberó un lugar y ahora sí ese pudo inscrbir, respondiendo 201.
 
-## Capturas
-
-### 201 Created, con header Location
-![Inscripción exitosa](capturas/inscripcion2.png)
-
-### 409 — cupo lleno
-![Cupo lleno](capturas/409%20por%20cupo%20clase.png)
-
-### 409 — inscripción duplicada
-![Inscripción duplicada](capturas/409%20repetir%20horario.png)
-
-### Cancelación
-![Cancelar inscripción](capturas/cancelar%20inscripcion%20.png)
-
-### Reenvío exitoso tras liberar el cupo
-![Inscribir de nuevo](capturas/inscribir%20de%20nuevo.png)
