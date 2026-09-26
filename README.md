@@ -44,6 +44,18 @@ registrar MiembrosModule en app.module.ts no modifica ni una sola línea de
 InscripcionesModule. Si algo se hubiera roto, sería porque se tocó código compartido, no por
 el simple hecho de sumar un módulo nuevo al proyecto.
 
+## Preguntas — Práctica 8 (Horarios)
+
+### 1. ¿Por qué el Service se inyecta sin token en el Controller, y el repositorio sí necesita uno?
+
+HorariosService es una clase concreta (existe como valor real en tiempo de ejecución), así que Nest puede usar el propio tipo de la clase para saber qué instancia inyectar, sin necesitar ninguna etiqueta adicional. HorarioRepository, en cambio, es solo una interfaz de TypeScript, se borra por completo al compilar a JavaScript y no deja ningún rastro en tiempo de ejecución. Como Nest no tiene nada real que buscar para ese tipo, hace falta un token (HORARIO_REPOSITORY) que actúe como etiqueta explícita, para decirle manualmente qué proveedor concreto (HorarioMemoriaRepository) entregar en ese lugar del constructor.
+
+### 2. Si mandas un `claseId` que no es número, ¿qué código de estado esperarías, y por qué este Controller no lo detecta?
+
+Lo esperable sería un 400 Bad Request, el cuerpo de la petición llegó con un tipo de dato incorrecto. Sin embargo, al probarlo en Postman mandando "claseId": "abc" en el `POST /horarios`, el servidor respondió con 201 Created, creando el horario de todas formas con ese valor inválido.
+
+Esto pasa porque CrearHorarioDto es solo una interfaz de TypeScript que existe únicamente en tiempo de compilación. En tiempo de ejecución, cuando llega la petición HTTP real, el dto que recibe el Controller es simplemente el JSON tal cual llegó del cliente, sin ninguna validación real detrás. TypeScript ya no está presente para detener nada una vez que el proyecto está compilado y corriendo, el Controller confía  en que los datos vienen con la forma correcta.
+
 
 ## Preguntas
 

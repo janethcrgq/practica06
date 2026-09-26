@@ -1,9 +1,3 @@
-export interface Clase {
-  id: number;
-  nombre: string;
-  duracionMin: number;
-}
-
 export interface Horario {
   id: number;
   claseId: number;
@@ -13,20 +7,5 @@ export interface Horario {
   entrenador: string;
 }
 
-export interface Miembro {
-  id: number;
-  nombre: string;
-  correo: string;
-  membresia: string;
-  activo: boolean;
-}
-
-export type EstadoInscripcion = 'confirmada' | 'cancelada';
-
-export interface Inscripcion {
-  id: number;
-  horarioId: number;
-  miembroId: number;
-  estado: EstadoInscripcion;
-  creadaEn: Date;
-}
+export type NuevoHorario = Omit<Horario, 'id'>;
+export type CambiosHorario = Partial<Omit<Horario, 'id'>>;

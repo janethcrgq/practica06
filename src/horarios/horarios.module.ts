@@ -1,9 +1,18 @@
 import { Module } from '@nestjs/common';
-import { HorariosService } from './horarios.service.js';
-import { HorariosController } from './horarios.controller.js';
+
+import { HorarioMemoriaRepository } from './infra/horario-memoria.repository.js';
+import { HORARIO_REPOSITORY } from './horarios.tokens.js';
+import { HorariosService } from './horario.service.js';
+import { HorariosController } from './horario.controller.js';
 
 @Module({
   controllers: [HorariosController],
-  providers: [HorariosService],
+  providers: [
+    HorariosService,
+    {
+      provide: HORARIO_REPOSITORY,
+      useClass: HorarioMemoriaRepository,
+    },
+  ],
 })
 export class HorariosModule {}
