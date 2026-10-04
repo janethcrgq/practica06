@@ -10,8 +10,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { MiembrosService } from './miembros.service';
-import type { CrearMiembroDto } from './dto/crear-miembro.dto';
-import type { ActualizarMiembroDto } from './dto/actualizar-miembro.dto';
+import { CrearMiembroDto } from './dto/crear-miembro.dto';
+import { ActualizarMiembroDto } from './dto/actualizar-miembro.dto';
 
 @Controller('miembros')
 export class MiembrosController {

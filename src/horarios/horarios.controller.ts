@@ -10,8 +10,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { HorariosService } from './horarios.service';
-import type { CrearHorarioDto } from './dto/crear-horario.dto';
-import type { ActualizarHorarioDto } from './dto/actualizar-horario.dto';
+import { CrearHorarioDto } from './dto/crear-horario.dto';
+import { ActualizarHorarioDto } from './dto/actualizar-horario.dto';
 
 @Controller('horarios')
 export class HorariosController {

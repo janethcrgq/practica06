@@ -60,7 +60,7 @@ model Inscripcion{
   horarioId Int
   miembroId Int
   estado EstadoInscripcion @default(confirmada)
-  creadoEn DateTime @default(now())
+  creadaEn DateTime @default(now())
 
   horario Horario @relation(fields: [horarioId], references: [id], onDelete: Cascade)
   miembro Miembro @relation(fields: [miembroId], references: [id], onDelete: Cascade)

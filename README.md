@@ -59,3 +59,38 @@ En una relación uno a muchos, la llave foránea siempre vive del lado "muchos",
 ¿De dónde sale la relación de muchos a muchos entre Miembro y Horario, si nunca se declaró?
 
 Sale de forma implícita a través de Inscripcion, que actúa como tabla intermedia. Tiene una relación muchos-a-uno hacia Horario y otra muchos-a-uno hacia Miembro. Como cada miembro puede tener varias inscripciones (a distintos horarios) y cada horario puede tener varias inscripciones (de distintos miembros), el resultado es que un miembro puede estar en muchos horarios y un horario puede tener muchos miembros, es decir, una relación muchos a muchos entre Miembro y Horario, pero modelada explícitamente mediante una tabla intermedia en vez de usar el m-n implícito de Prisma. Se hace así porque la relación necesita cargar datos propios que un m-n implícito no podría almacenar.
+
+## Preguntas de Practica 9
+
+## Pregunta 1 
+¿Qué línea del Service o del Controller tuvo que cambiar para que Clases hablara con MySQL?
+
+Ninguna línea del ClasesService ni del ClasesController cambió. El único cambio fue en clases.module.ts, donde se modificó el valor de useClass de ClaseMemoriaRepository a ClasePrismaRepository. Esto fue posible porque, gracias a la arquitectura, el ClasesService depende de la interfaz ClaseRepository, no de una implementación concreta. Al crear esa interfaz, el Service nunca necesita saber qué clase la está implementando por debajo, así que solo fue necesario cambiar qué implementación se inyecta en el módulo.
+
+## Pregunta 2
+¿Por qué InscripcionesService no cambió ni una línea de las reglas de cupo/duplicados?
+
+Porque esas reglas viven en el Service, y el Service solo depende de la interfaz InscripcionRepository, no de su implementación. Cambiar de memoria a Prisma solo cambió cómo se guardan y obtienen los datos, no qué hace el Service con ellos una vez que los tiene, así que no había nada en esa lógica que tocar.
+
+## Pregunta 3
+¿Por qué una interfaz no puede validar en tiempo de ejecución?
+
+Porque las interfaces de TypeScript se borran al compilar a JavaScript, no existen en el código que realmente corre. class-validator necesita algo real sobre qué validar cuando llega una petición, y una interfaz ya no está ahí para ese momento. Por eso se cambiaron a clases, que sí existen en tiempo de ejecución.
+
+## Pregunta 4
+¿Qué código de estado responde y qué trae en el cuerpo?
+
+En ambos casos responde 400 Bad Request. El cuerpo trae { message, error, statusCode }, donde message es un arreglo con el detalle del error. Para un tipo incompatible, indica qué regla falló ("claseId must be an integer number"), para un campo no declarado, indica que no debería existir ("property colorFavorito should not exist").
+
+## Pregunta 5
+¿Cuántas líneas quedó más corto el controlador con el filter?
+
+Aproximadamente 10 líneas. El bloque try catch que traducía los errores de dominio a NotFoundException/ConflictException se redujo a solo 3 líneas sin try/catch, una vez que el filtro de excepciones asumió esa responsabilidad.
+
+## Prgeunta 6
+Si la respuesta llega en los dos casos, ¿quién bloquea
+realmente y a quién protege?
+
+El navegador bloquea, el servidor siempre manda la respuesta completa sin importar el origen. Y protege al usuario, no al servidor ya que evita que un sitio malicioso, usando la sesión activa del usuario en el navegador, pueda leer respuestas de otros sitios sin que el usuario se entere.
+
+

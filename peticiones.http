@@ -166,3 +166,37 @@ GET {{host}}/horarios/99
 
 ### 27. Horarios - eliminar  ->  200
 DELETE {{host}}/horarios/4
+
+###Prueba 1 (tipo equivocado)
+POST http://localhost:3000/horarios
+Content-Type: application/json
+
+{
+"claseId": "hola",
+"dia": "lunes",
+"horaInicio": "07:00",
+"cupoMaximo": 2,
+"entrenador": "Ana"
+}
+
+###Prueba 2 (campo no existente)
+POST http://localhost:3000/clases
+Content-Type: application/json
+
+{
+  "nombre": "Yoga",
+  "descripcion": "test",
+  "colorFavorito": "azul"
+
+
+}
+
+### Prueba 3 (CORS con origen permitido)
+GET http://localhost:3000/clases
+Origin: https://localhost:5173
+
+
+### Prueba 4 (CORS con origen no permitido)
+GET http://localhost:3000/clases
+Origin: https://otrapagina.com
+q

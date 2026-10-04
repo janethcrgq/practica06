@@ -10,8 +10,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { ClasesService } from './clases.service';
-import type { CrearClaseDto } from './dto/crear-clase.dto';
-import type { ActualizarClaseDto } from './dto/actualizar-clase.dto';
+import { CrearClaseDto } from './dto/crear-clase.dto';
+import { ActualizarClaseDto } from './dto/actualizar-clase.dto';
 
 @Controller('clases')
 export class ClasesController {

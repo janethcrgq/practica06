@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Body,
-  ConflictException,
   Controller,
   Delete,
   Get,
@@ -13,14 +12,9 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { InscripcionesService } from './inscripciones.service';
-import type { CrearInscripcionDto } from './dto/crear-inscripcion.dto';
+import { CrearInscripcionDto } from './dto/crear-inscripcion.dto';
 import { aInscripcionDto } from './dto/inscripcion-respuesta.dto';
-import {
-  CupoLlenoError,
-  HorarioNoEncontradoError,
-  InscripcionDuplicadaError,
-  MiembroNoEncontradoError,
-} from './dominio/errores';
+
 
 @Controller('inscripciones')
 export class InscripcionesController {
@@ -55,19 +49,11 @@ export class InscripcionesController {
       );
     }
 
-    try {
-      const inscripcion = await this.servicio.crear(dto);
-      res.setHeader('Location', `/inscripciones/${inscripcion.id}`);
-      return aInscripcionDto(inscripcion);
-    } catch (error) {
-      if (error instanceof HorarioNoEncontradoError || error instanceof MiembroNoEncontradoError) {
-        throw new NotFoundException(error.message);
-      }
-      if (error instanceof CupoLlenoError || error instanceof InscripcionDuplicadaError) {
-        throw new ConflictException(error.message);
-      }
-      throw error;
-    }
+    
+   const inscripcion = await this.servicio.crear(dto);
+   res.setHeader('Location', `/inscripciones/${inscripcion.id}`);
+   return aInscripcionDto(inscripcion);
+    
   }
 
   @Delete(':id')
