@@ -54,7 +54,8 @@ export const ModelName = {
   Clase: 'Clase',
   Horario: 'Horario',
   Miembro: 'Miembro',
-  Inscripcion: 'Inscripcion'
+  Inscripcion: 'Inscripcion',
+  Usuario: 'Usuario'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -116,6 +117,18 @@ export const InscripcionScalarFieldEnum = {
 export type InscripcionScalarFieldEnum = (typeof InscripcionScalarFieldEnum)[keyof typeof InscripcionScalarFieldEnum]
 
 
+export const UsuarioScalarFieldEnum = {
+  id: 'id',
+  correo: 'correo',
+  passwordHash: 'passwordHash',
+  rol: 'rol',
+  miembroId: 'miembroId',
+  creadoEn: 'creadoEn'
+} as const
+
+export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -148,4 +161,21 @@ export const MiembroOrderByRelevanceFieldEnum = {
 } as const
 
 export type MiembroOrderByRelevanceFieldEnum = (typeof MiembroOrderByRelevanceFieldEnum)[keyof typeof MiembroOrderByRelevanceFieldEnum]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const UsuarioOrderByRelevanceFieldEnum = {
+  correo: 'correo',
+  passwordHash: 'passwordHash',
+  rol: 'rol'
+} as const
+
+export type UsuarioOrderByRelevanceFieldEnum = (typeof UsuarioOrderByRelevanceFieldEnum)[keyof typeof UsuarioOrderByRelevanceFieldEnum]
 

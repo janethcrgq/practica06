@@ -59,3 +59,8 @@ export type Miembro = Prisma.MiembroModel
  * 
  */
 export type Inscripcion = Prisma.InscripcionModel
+/**
+ * Model Usuario
+ * 
+ */
+export type Usuario = Prisma.UsuarioModel

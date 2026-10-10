@@ -64,6 +64,15 @@ Content-Type: application/json
 GET {{host}}/inscripciones
 
 
+### CORS, origen permitido
+GET {{host}}/clases
+Origin: http://localhost:5173
+
+### CORS, origen no permitido
+GET {{host}}/clases
+Origin: http://localhost:4000
+
+
 ### 9. Cancelar la primera  ->  200 con estado "cancelada"
 DELETE {{host}}/inscripciones/1
 
@@ -198,5 +207,83 @@ Origin: https://localhost:5173
 
 ### Prueba 4 (CORS con origen no permitido)
 GET http://localhost:3000/clases
-Origin: https://otrapagina.com
-q
+Origin: https://localhost:4000
+
+### Login Karla (miembro)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "correo": "karla@itson.mx",
+  "password": "gimnasio2026"
+}
+
+### Login Ana (entrenadora)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "correo": "ana@itson.mx",
+  "password": "gimnasio2026"
+}
+
+### Registro Karla (miembro)
+POST {{host}}/auth/registro
+Content-Type: application/json
+
+{
+  "correo": "karla@itson.mx",
+  "password": "gimnasio2026",
+  "miembroId": 1
+}
+
+### Registro Ana (entrenadora)
+POST {{host}}/auth/registro
+Content-Type: application/json
+
+{
+  "correo": "ana@itson.mx",
+  "password": "gimnasio2026",
+  "rol": "entrenador"
+}
+
+### Registro Admin
+POST {{host}}/auth/registro
+Content-Type: application/json
+
+{
+  "correo": "admin@itson.mx",
+  "password": "gimnasio2026",
+  "rol": "admin"
+}
+
+### DELETE con miembro (Karla)
+DELETE {{host}}/inscripciones/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImNvcnJlbyI6ImthcmxhQGl0c29uLm14Iiwicm9sIjoibWllbWJybyIsIm1pZW1icm9JZCI6MSwiaWF0IjoxNzkxNjMwODM0LCJleHAiOjE3OTE2MzQ0MzR9.ed57ZQWCH9oODo7GnITaaYv9Afi4q9Y3t8MNocUg94A
+
+### DELETE con entrenador (Ana)
+DELETE {{host}}/inscripciones/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImNvcnJlbyI6ImFuYUBpdHNvbi5teCIsInJvbCI6ImVudHJlbmFkb3IiLCJtaWVtYnJvSWQiOm51bGwsImlhdCI6MTc5MTYzMDk5NCwiZXhwIjoxNzkxNjM0NTk0fQ.Rje0Y9sXGd_lZWFi26m79Dn42CyKrRt63p5TfvWdOMw
+
+### Inscribir a Karla
+POST {{host}}/inscripciones
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImNvcnJlbyI6ImthcmxhQGl0c29uLm14Iiwicm9sIjoibWllbWJybyIsIm1pZW1icm9JZCI6MSwiaWF0IjoxNzkxNjcwOTQzLCJleHAiOjE3OTE2NzQ1NDN9.ijeQFFa55H0BLgiV3q0yK6Q_Xomj5r4wHjpjtOlpLYE
+
+{
+  "horarioId": 1,
+  "miembroId": 1
+}
+
+### Sin token
+GET {{host}}/inscripciones
+
+### Karla intenta inscribir a Sofía
+POST {{host}}/inscripciones
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImNvcnJlbyI6ImthcmxhQGl0c29uLm14Iiwicm9sIjoibWllbWJybyIsIm1pZW1icm9JZCI6MSwiaWF0IjoxNzkxNjcxNTkzLCJleHAiOjE3OTE2NzUxOTN9.ZUWlqSor-yuq4VAsGE7WsftTd8ACkxQa9UNhNFS8r8U
+
+{
+  "horarioId": 1,
+  "miembroId": 3
+}

@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   HttpCode,
   NotFoundException,
@@ -14,6 +15,9 @@ import type { Response } from 'express';
 import { InscripcionesService } from './inscripciones.service';
 import { CrearInscripcionDto } from './dto/crear-inscripcion.dto';
 import { aInscripcionDto } from './dto/inscripcion-respuesta.dto';
+import { UsuarioActual } from 'src/auth/decoradores/usuario-actual.decorator';
+import { Rol, type PayLoadJwt } from 'src/auth/dominio/usuario';
+import { Roles } from 'src/auth/decoradores/roles.decorator';
 
 
 @Controller('inscripciones')
@@ -39,23 +43,27 @@ export class InscripcionesController {
   @HttpCode(201)
   async crear(
     @Body() dto: CrearInscripcionDto,
+    @UsuarioActual() usuario: PayLoadJwt,
     @Res({ passthrough: true }) res: Response,
   ) {
     // 400 = no entiendo la peticion. 409 = la entiendo, pero choca
     // con el estado actual del sistema.
-    if (!Number.isInteger(dto?.horarioId) || !Number.isInteger(dto?.miembroId)) {
-      throw new BadRequestException(
-        'horarioId y miembroId son obligatorios y deben ser numeros enteros',
-      );
+
+
+    // los miembros solo pueden inscribirse a si mismos 
+    if(usuario.rol === Rol.miembro && usuario.miembroId !== dto.miembroId){
+      throw new ForbiddenException('Solo puedes incribirte a ti mismo');
     }
+   
 
     
-   const inscripcion = await this.servicio.crear(dto);
-   res.setHeader('Location', `/inscripciones/${inscripcion.id}`);
+   const inscripcion = await this.servicio.crear(dto);// si falla, lanza y sale
+   res.setHeader('Location', `/inscripciones/${inscripcion.id}`); //201 mas donde quedo
    return aInscripcionDto(inscripcion);
     
   }
 
+  @Roles(Rol.entrenador, Rol.admin)
   @Delete(':id')
   async cancelar(@Param('id') id: string) {
     const cancelada = await this.servicio.cancelar(Number(id));
